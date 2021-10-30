@@ -1,18 +1,23 @@
 import React, { Component } from 'react'
 import { Form,Icon , Input, Button} from 'antd';
 
-
 import './login.less'
-import logo from './images/logo192.png'
+import logo from './images/logo192.png' 
+import { reqLogin }from '../../api'
 
 const Item = Form.Item // 不能写在import之前
 
  class Login extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async(err, values) => {
           if (!err) {
-            console.log('提交登录的ajax请求', values);
+            const { username,password } = values
+            const response = await reqLogin(username,password)
+            console.log('请求成功',response.data)
+
+        } else {
+              console.log('检验失败');
           }
         });
       };
