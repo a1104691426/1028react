@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Form,Icon , Input, Button} from 'antd';
+import { Form,Icon , Input, Button,message} from 'antd';
 
 import './login.less'
 import logo from './images/logo192.png' 
 import { reqLogin }from '../../api'
+import memoryUtils from '../../utils/memoryUtils';
+import storageUtils from '../../utils/storageUtils'
 
 const Item = Form.Item // 不能写在import之前
 
@@ -13,8 +15,14 @@ const Item = Form.Item // 不能写在import之前
         this.props.form.validateFields(async(err, values) => {
           if (!err) {
             const { username,password } = values
-            const response = await reqLogin(username,password)
-            console.log('请求成功',response.data)
+            const result = await reqLogin(username,password)
+            if(result.status===0){// 登陆成功
+                message.success('登陆成功')
+                const user = result.data
+                memoryUtils.user = user// 保存在内存中
+                storageUtils.saveUser(user)// 保存到local中
+                this.props.history.replace('/')
+            }
 
         } else {
               console.log('检验失败');
