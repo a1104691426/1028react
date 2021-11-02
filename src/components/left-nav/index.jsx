@@ -1,15 +1,53 @@
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
+import {Link,withRouter} from 'react-router-dom'
 import { Menu, Icon } from 'antd';
 
-import logo from '../../assets/images/logo192.png' 
+import logo from '../../assets/images/logo192.png'
+import menuList from '../../config/menuConfig';
 import './index.less'
 
 const { SubMenu } = Menu;
 
-export default class LeftNav extends Component {
+class LeftNav extends Component {
+    getMenuNodes = (menuList) =>{
+        const path = this.props.location.pathname
+        return menuList.map(item=>{
+            if(!item.children){
+                return (
+                    <Menu.Item key={item.key}>
+                        <Link to={item.key}>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                        </Link>
+                    </Menu.Item>
+                )
+            }else{
+               const cItem = item.children.find(cItem => cItem.key === path)
+               if(cItem){
+                this.openKey = item.key
+               }
+                return (
+                    <SubMenu
+                        key={item.key}
+                        title={
+                        <span>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                        </span>
+                        }
+                    >
+                        {this.getMenuNodes(item.children)} {/*递归调用children*/}
+                    </SubMenu>
+                )
+            }
+        })
+    }
+    componentWillMount(){
+        this.menuNodes = this.getMenuNodes(menuList)
+    }
     
     render() {
+        const path = this.props.location.pathname
         return (
             
             <div className="left-nav">
@@ -18,93 +56,18 @@ export default class LeftNav extends Component {
                     <h1>电商后台</h1>
                 </Link>
                 <Menu
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
+                    selectedKeys={[path]}
+                    defaultOpenKeys={[this.openKey]}
                     mode="inline"
                     theme="dark"
                     >
-                    <Menu.Item key="1">
-                        <Link to='/home'>
-                            <Icon type="pie-chart" />
-                            <span>首页</span>
-                        </Link>
-                    </Menu.Item>
-                    <SubMenu
-                        key="sub1"
-                        title={
-                        <span>
-                            <Icon type="mail" />
-                            <span>商品</span>
-                        </span>
-                        }
-                    >
-                        <Menu.Item key="2">
-                            <Link to='/category'>
-                                <span>
-                                    <Icon type="mail" />
-                                    <span>品类管理</span>
-                                </span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <Link to='/product'>
-                                <span>
-                                    <Icon type="mail" />
-                                    <span>商品管理</span>
-                                </span>
-                            </Link>
-                        </Menu.Item>
-                        
-                    </SubMenu>
-                    <Menu.Item key="4">
-                        <Link to='/user'>
-                            <Icon type="pie-chart" />
-                            <span>用户管理</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="5">
-                        <Link to='role'>
-                            <Icon type="pie-chart" />
-                            <span>角色管理</span>
-                        </Link>
-                    </Menu.Item>
-                    <SubMenu
-                        key="sub2"
-                        title={
-                        <span>
-                            <Icon type="mail" />
-                            <span>图形图标</span>
-                        </span>
-                        }
-                    >
-                        <Menu.Item key="6">
-                            <Link to='/charts/bar'>
-                                <span>
-                                    <Icon type="mail" />
-                                    <span>柱形图</span>
-                                </span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="7">
-                            <Link to='/charts/line'>
-                                <span>
-                                    <Icon type="mail" />
-                                    <span>折线图</span>
-                                </span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="6">
-                            <Link to='/charts/pie'>
-                                <span>
-                                    <Icon type="mail" />
-                                    <span>饼图</span>
-                                </span>
-                            </Link>
-                        </Menu.Item>
-                    </SubMenu>
-                    </Menu>
+                    {
+                       this.menuNodes
+                    }
+                </Menu>
             </div>
             
         )
     }
 }
+export default withRouter(LeftNav)
