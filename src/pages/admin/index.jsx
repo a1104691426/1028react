@@ -31,7 +31,7 @@ export default class Admin extends Component {
                         <LeftNav/>
                     </Sider>
                     <Layout>
-                        <Header><Header/></Header>
+                        <Header/>
                         <Content style={{backgroundColor:'white',margin:'20px'}}>
                         <Switch> 
                             <Route path='/home' component={Home}/> 

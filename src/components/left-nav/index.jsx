@@ -12,27 +12,28 @@ class LeftNav extends Component {
     getMenuNodes = (menuList) =>{
         const path = this.props.location.pathname
         return menuList.map(item=>{
+            const {key, icon, title } = item
             if(!item.children){
                 return (
-                    <Menu.Item key={item.key}>
-                        <Link to={item.key}>
-                            <Icon type={item.icon} />
-                            <span>{item.title}</span>
+                    <Menu.Item key={key}>
+                        <Link to={key}>
+                            <Icon type={icon} />
+                            <span>{title}</span>
                         </Link>
                     </Menu.Item>
                 )
             }else{
                const cItem = item.children.find(cItem => cItem.key === path)
                if(cItem){
-                this.openKey = item.key
+                this.openKey = key
                }
                 return (
                     <SubMenu
-                        key={item.key}
+                        key={key}
                         title={
                         <span>
-                            <Icon type={item.icon} />
-                            <span>{item.title}</span>
+                            <Icon type={icon} />
+                            <span>{title}</span>
                         </span>
                         }
                     >
