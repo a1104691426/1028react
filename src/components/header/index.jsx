@@ -39,15 +39,23 @@ class Header extends Component {
     }
     ptsrc=()=>{
         const weather = this.state.weather
-        if (weather==='多云') {
-            return 'http://api.map.baidu.com/images/weather/day/duoyun.png'
-        }if (weather==='晴') {
-            return 'http://api.map.baidu.com/images/weather/day/qing.png'
-        } if (weather==='阴') {
-            return 'http://api.map.baidu.com/images/weather/day/yin.png'
-        }else {
-            return 'http://api.map.baidu.com/images/weather/day/zhongyu.png'
+        // if (weather==='多云') {
+        //     return 'http://api.map.baidu.com/images/weather/day/duoyun.png'
+        // }if (weather==='晴') {
+        //     return 'http://api.map.baidu.com/images/weather/day/qing.png'
+        // } if (weather==='阴') {
+        //     return 'http://api.map.baidu.com/images/weather/day/yin.png'
+        // }else {
+        //     return 'http://api.map.baidu.com/images/weather/day/zhongyu.png'
+        // }
+        const weatherMap = {
+            '多云':'http://api.map.baidu.com/images/weather/day/duoyun.png' ,
+            '晴' : 'http://api.map.baidu.com/images/weather/day/qing.png' , 
+            '阴':'http://api.map.baidu.com/images/weather/day/yin.png' , 
+            'default': 'http://api.map.baidu.com/images/weather/day/zhongyu.png'
         }
+        const icon = weatherMap[weather] || weatherMap['default'] 
+        return icon
     }
     logout = ()=>{
         Modal.confirm({
