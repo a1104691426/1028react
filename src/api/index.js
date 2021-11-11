@@ -17,6 +17,23 @@ export const reqAddCategory = (parentId, categoryName) =>
 //更新分类
 export const reqUpdateCategory = (categoryId, categoryName) =>
   ajax(BASE + "/manage/category/update", { categoryId, categoryName }, "POST");
+//获取商品分类列表
+export const reqProducts = (pageNum, pageSize) =>
+  ajax(BASE + "/manage/product/list", { pageNum, pageSize });
+//搜索商品分页列表
+export const reqSearchProducts = ({pageNum,pageSize,searchName,searchType}) => 
+ ajax(BASE + "/manage/product/search",{pageNum,pageSize,[searchType]:searchName})
+// export const reqSearchProducts = ({
+//   pageNum,
+//   pageSize,
+//   searchName,
+//   searchType,
+// }) =>
+//   ajax(BASE + "/manage/product/search", {
+//     pageNum,
+//     pageSize,
+//     [searchType]: searchName,
+//   });
 
 export const reqCity = () => {
   return new Promise((resolve, reject) => {
