@@ -23,17 +23,8 @@ export const reqProducts = (pageNum, pageSize) =>
 //搜索商品分页列表
 export const reqSearchProducts = ({pageNum,pageSize,searchName,searchType}) => 
  ajax(BASE + "/manage/product/search",{pageNum,pageSize,[searchType]:searchName})
-// export const reqSearchProducts = ({
-//   pageNum,
-//   pageSize,
-//   searchName,
-//   searchType,
-// }) =>
-//   ajax(BASE + "/manage/product/search", {
-//     pageNum,
-//     pageSize,
-//     [searchType]: searchName,
-//   });
+//获取一个分类
+export const reqCategory = (categoryId) => ajax(BASE +"/manage/category/info",{categoryId}) 
 
 export const reqCity = () => {
   return new Promise((resolve, reject) => {
