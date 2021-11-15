@@ -25,6 +25,8 @@ export const reqSearchProducts = ({pageNum,pageSize,searchName,searchType}) =>
  ajax(BASE + "/manage/product/search",{pageNum,pageSize,[searchType]:searchName})
 //获取一个分类
 export const reqCategory = (categoryId) => ajax(BASE +"/manage/category/info",{categoryId}) 
+//更新商品的状态，上下架！
+export const reqUpdateStatus = (productId,status) => ajax(BASE+"/manage/product/updateStatus",{productId,status},"POST")
 
 export const reqCity = () => {
   return new Promise((resolve, reject) => {

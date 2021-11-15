@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Card, Select, Input, Button, Icon, Table } from "antd";
+import { Card, Select, Input, Button, Icon, Table, message } from "antd";
 
 import LinkButton from "../../../components/link-buttom";
 import { PAGE_SIZE } from "../../../utils/constants";
-import { reqProducts, reqSearchProducts } from "../../../api";
+import { reqProducts, reqSearchProducts,reqUpdateStatus } from "../../../api";
 const Option = Select.Option;
 
 export default class ProductHome extends Component {
@@ -33,12 +33,18 @@ export default class ProductHome extends Component {
       {
         width: 100,
         title: "状态",
-        dataIndex: "status",
-        render: (status) => {
+        //dataIndex: "status",
+        render: (product) => {
+          const {status,_id} = product
           return (
             <span>
-              <Button type="primary">下架</Button>
-              <span>在售</span>
+              <Button 
+                type="primary" 
+                onClick={()=>{this.updateStatus(_id,status===1 ? 2 : 1 )}}
+              >
+                {status===1 ? '下架':'上架'}
+              </Button>
+              <span>{status===1 ? '在售':'已下架'}</span>
             </span>
           );
         },
@@ -59,6 +65,7 @@ export default class ProductHome extends Component {
     ];
   };
   getProducts = async (pageNum) => {
+    this.pageNum=pageNum
     this.setState({ loading: true });
     const { searchName, searchType } = this.state;
     const pageSize = PAGE_SIZE;
@@ -82,6 +89,13 @@ export default class ProductHome extends Component {
       this.setState({ total, products: list });
     }
   };
+  updateStatus = async(productId,status) => {
+    const result = await reqUpdateStatus(productId,status)
+    if (result.status===0) {
+      message.success('更新商品成功')
+      this.getProducts(this.pageNum)
+    }
+  }
   componentWillMount() {
     this.initColums();
   }
@@ -116,7 +130,7 @@ export default class ProductHome extends Component {
       </span>
     );
     const extra = (
-      <Button type="primary">
+      <Button type="primary"  onClick={()=>{this.props.history.push('/product/addupdate')}}>
         <Icon type="plus"></Icon>
         添加商品
       </Button>
