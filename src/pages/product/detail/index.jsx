@@ -27,8 +27,8 @@ export default class ProductDetail extends Component {
     //   const cName2 = result.data.name;
     //一次性发多个请求，只有都成功了，才正常处理
         const results = await Promise.all([reqCategory(categoryId),await reqCategory(pCategoryId)])
-        const cName1 = results[0].data.name;
-        const cName2 = results[1].data.name; 
+        const cName2 = results[0].data.name;
+        const cName1 = results[1].data.name; 
         this.setState({ cName1, cName2 });
     }
   }

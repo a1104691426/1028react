@@ -21,13 +21,26 @@ export const reqUpdateCategory = (categoryId, categoryName) =>
 export const reqProducts = (pageNum, pageSize) =>
   ajax(BASE + "/manage/product/list", { pageNum, pageSize });
 //搜索商品分页列表
-export const reqSearchProducts = ({pageNum,pageSize,searchName,searchType}) => 
- ajax(BASE + "/manage/product/search",{pageNum,pageSize,[searchType]:searchName})
+export const reqSearchProducts = ({
+  pageNum,
+  pageSize,
+  searchName,
+  searchType,
+}) =>
+  ajax(BASE + "/manage/product/search", {
+    pageNum,
+    pageSize,
+    [searchType]: searchName,
+  });
 //获取一个分类
-export const reqCategory = (categoryId) => ajax(BASE +"/manage/category/info",{categoryId}) 
+export const reqCategory = (categoryId) =>
+  ajax(BASE + "/manage/category/info", { categoryId });
 //更新商品的状态，上下架！
-export const reqUpdateStatus = (productId,status) => ajax(BASE+"/manage/product/updateStatus",{productId,status},"POST")
-
+export const reqUpdateStatus = (productId, status) =>
+  ajax(BASE + "/manage/product/updateStatus", { productId, status }, "POST");
+//删除图片
+export const reqDeleteImg = (name) =>
+  ajax(BASE + "/manage/img/delete", { name }, "POST");
 export const reqCity = () => {
   return new Promise((resolve, reject) => {
     const url = `https://restapi.amap.com/v3/ip?key=2cd9b7e1e586c66c3b98e07f887ed382`;
