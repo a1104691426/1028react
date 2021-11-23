@@ -3,7 +3,7 @@ import { Card, Select, Input, Button, Icon, Table, message } from "antd";
 
 import LinkButton from "../../../components/link-buttom";
 import { PAGE_SIZE } from "../../../utils/constants";
-import { reqProducts, reqSearchProducts,reqUpdateStatus } from "../../../api";
+import { reqProducts, reqSearchProducts, reqUpdateStatus } from "../../../api";
 const Option = Select.Option;
 
 export default class ProductHome extends Component {
@@ -35,16 +35,18 @@ export default class ProductHome extends Component {
         title: "状态",
         //dataIndex: "status",
         render: (product) => {
-          const {status,_id} = product
+          const { status, _id } = product;
           return (
             <span>
-              <Button 
-                type="primary" 
-                onClick={()=>{this.updateStatus(_id,status===1 ? 2 : 1 )}}
+              <Button
+                type="primary"
+                onClick={() => {
+                  this.updateStatus(_id, status === 1 ? 2 : 1);
+                }}
               >
-                {status===1 ? '下架':'上架'}
+                {status === 1 ? "下架" : "上架"}
               </Button>
-              <span>{status===1 ? '在售':'已下架'}</span>
+              <span>{status === 1 ? "在售" : "已下架"}</span>
             </span>
           );
         },
@@ -56,8 +58,20 @@ export default class ProductHome extends Component {
           return (
             <span>
               {/* 将product对象使用state传递给目标路由组件*/}
-              <LinkButton onClick={() => this.props.history.push('/product/detail',product)}>详情</LinkButton>
-              <LinkButton onClick={() => this.props.history.push('/product/addupdate',product)}>修改</LinkButton>
+              <LinkButton
+                onClick={() =>
+                  this.props.history.push("/product/detail", product)
+                }
+              >
+                详情
+              </LinkButton>
+              <LinkButton
+                onClick={() =>
+                  this.props.history.push("/product/addupdate", product)
+                }
+              >
+                修改
+              </LinkButton>
             </span>
           );
         },
@@ -65,7 +79,7 @@ export default class ProductHome extends Component {
     ];
   };
   getProducts = async (pageNum) => {
-    this.pageNum=pageNum
+    this.pageNum = pageNum;
     this.setState({ loading: true });
     const { searchName, searchType } = this.state;
     const pageSize = PAGE_SIZE;
@@ -79,7 +93,6 @@ export default class ProductHome extends Component {
       });
     } else {
       result = await reqProducts(pageNum, pageSize);
-      
     }
     this.setState({ loading: false });
 
@@ -89,13 +102,13 @@ export default class ProductHome extends Component {
       this.setState({ total, products: list });
     }
   };
-  updateStatus = async(productId,status) => {
-    const result = await reqUpdateStatus(productId,status)
-    if (result.status===0) {
-      message.success('更新商品成功')
-      this.getProducts(this.pageNum)
+  updateStatus = async (productId, status) => {
+    const result = await reqUpdateStatus(productId, status);
+    if (result.status === 0) {
+      message.success("更新商品成功");
+      this.getProducts(this.pageNum);
     }
-  }
+  };
   componentWillMount() {
     this.initColums();
   }
@@ -130,7 +143,12 @@ export default class ProductHome extends Component {
       </span>
     );
     const extra = (
-      <Button type="primary"  onClick={()=>{this.props.history.push('/product/addupdate')}}>
+      <Button
+        type="primary"
+        onClick={() => {
+          this.props.history.push("/product/addupdate");
+        }}
+      >
         <Icon type="plus"></Icon>
         添加商品
       </Button>

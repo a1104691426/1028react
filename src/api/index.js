@@ -41,6 +41,20 @@ export const reqUpdateStatus = (productId, status) =>
 //删除图片
 export const reqDeleteImg = (name) =>
   ajax(BASE + "/manage/img/delete", { name }, "POST");
+//添加/修改商品
+export const reqAddOrUpdateProduct = (product) =>
+  ajax(
+    BASE + "/manage/product/" + (product._id ? "update" : "add"),
+    product,
+    "POST"
+  );
+//修改商品
+//export const reqUpdateProduct = (product) => ajax(BASE+"/manage/product/update",product,'POST')
+//获取所有角色的列表
+export const reqRoles = () => ajax (BASE+"/manage/role/list")
+//添加角色
+export const reqAddRole = (roleName) => ajax (BASE+"/manage/role/add",{roleName},"POST")
+
 export const reqCity = () => {
   return new Promise((resolve, reject) => {
     const url = `https://restapi.amap.com/v3/ip?key=2cd9b7e1e586c66c3b98e07f887ed382`;
