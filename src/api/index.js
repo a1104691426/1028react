@@ -54,8 +54,10 @@ export const reqAddOrUpdateProduct = (product) =>
 export const reqRoles = () => ajax (BASE+"/manage/role/list")
 //添加角色
 export const reqAddRole = (roleName) => ajax (BASE+"/manage/role/add",{roleName},"POST")
-//
+
 export const reqUpdateRole = ( role ) => ajax (BASE+"/manage/role/update",role,"POST")
+//获取用户列表
+export const reqUsers = () => ajax (BASE+"/manage/user/list")
 export const reqCity = () => {
   return new Promise((resolve, reject) => {
     const url = `https://restapi.amap.com/v3/ip?key=2cd9b7e1e586c66c3b98e07f887ed382`;
