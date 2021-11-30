@@ -58,6 +58,10 @@ export const reqAddRole = (roleName) => ajax (BASE+"/manage/role/add",{roleName}
 export const reqUpdateRole = ( role ) => ajax (BASE+"/manage/role/update",role,"POST")
 //获取用户列表
 export const reqUsers = () => ajax (BASE+"/manage/user/list")
+//删除指定用户
+export const reqDeleteUser = (userId) => ajax(BASE+"/manage/user/delete",{userId},'POST')
+//添加/修改用户
+export const reqAddOrUpdateUser = (user) => ajax(BASE+"/manage/user/"+(user._id ? "update": "add"),user,"POST")
 export const reqCity = () => {
   return new Promise((resolve, reject) => {
     const url = `https://restapi.amap.com/v3/ip?key=2cd9b7e1e586c66c3b98e07f887ed382`;

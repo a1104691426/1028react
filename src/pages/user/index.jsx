@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import { Card, Button, Table, Modal } from "antd";
+import React, { PureComponent } from "react";
+import { Card, Button, Table, Modal, message } from "antd";
 
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-buttom";
 import { PAGE_SIZE } from "../../utils/constants";
-import {reqUsers} from '../../api'
+import {reqUsers,reqDeleteUser,reqAddOrUpdateUser} from '../../api'
+import UserForm from './user-form'
 
 //用户路由
-export default class User extends Component {
+export default class User extends PureComponent {
   state = {
     users: [], //所有的用户列表
     roles:[],//所有角色列表
@@ -42,8 +43,8 @@ export default class User extends Component {
         title: "操作",
         render: (user) => (
           <span>
-            <LinkButton>修改</LinkButton>
-            <LinkButton>删除</LinkButton>
+            <LinkButton >修改</LinkButton>
+            <LinkButton onClick={()=>this.deleteUser(user)}>删除</LinkButton>
           </span>
         ),
       },
@@ -64,16 +65,43 @@ export default class User extends Component {
         this.setState({users,roles})
       }
   }
-  addOrUpdateUser = () => {};
+  addOrUpdateUser = async() => {
+    this.setState({isShow:false})
+    const user = this.form.getFieldsValue()
+    this.form.resetFields()
+    const result = await reqAddOrUpdateUser(user)
+    if(result.status===0){
+      message.success('添加用户成功')
+      this.getUsers()
+    }else{
+      message.error('添加失败')
+    }
+
+  };
   componentWillMount() {
     this.initColumns();
+  }
+  deleteUser = (user) =>{
+    Modal.confirm({
+      title: `确定删除${user.username}吗?`,
+      onOk : async ()=> {
+        const result = await reqDeleteUser(user._id)
+        if (result.status===0){
+          message.success('删除成功')
+          this.getUsers()
+        }
+        else{
+          message.error('删除失败')
+        }
+      }
+    })
   }
   componentDidMount(){
       this.getUsers()
   }
   render() {
-    const { users, isShow } = this.state;
-    const title = <Button type="primary">创建用户</Button>;
+    const { users, isShow, roles } = this.state;
+    const title = <Button type="primary" onClick={()=> this.setState({isShow:true})}>创建用户</Button>;
     return (
       <Card title={title}>
         <Table
@@ -88,7 +116,12 @@ export default class User extends Component {
           visible={isShow}
           onOk={this.addOrUpdateUser}
           onCancel={() => this.setState({ isShow: false })}
-        ></Modal>
+        >
+          <UserForm 
+            setForm={(form) => (this.form = form)}
+            roles={roles}
+            />
+        </Modal>
       </Card>
     );
   }
