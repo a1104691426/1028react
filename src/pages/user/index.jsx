@@ -43,7 +43,7 @@ export default class User extends PureComponent {
         title: "操作",
         render: (user) => (
           <span>
-            <LinkButton >修改</LinkButton>
+            <LinkButton onClick={()=>this.showUpdate(user)}>修改</LinkButton>
             <LinkButton onClick={()=>this.deleteUser(user)}>删除</LinkButton>
           </span>
         ),
@@ -69,15 +69,45 @@ export default class User extends PureComponent {
     this.setState({isShow:false})
     const user = this.form.getFieldsValue()
     this.form.resetFields()
-    const result = await reqAddOrUpdateUser(user)
-    if(result.status===0){
-      message.success('添加用户成功')
-      this.getUsers()
-    }else{
-      message.error('添加失败')
-    }
-
+  //   if(this.user){
+  //     user._id = this.user._id
+  //     const result = await reqAddOrUpdateUser(user)
+  //     if(result.status===0){
+  //       message.success('修改用户成功')
+  //       this.getUsers()
+  //     }else{
+  //       message.error('修改用户失败')
+  //     }
+  //   }else{
+  //   const result = await reqAddOrUpdateUser(user)
+  //   if(result.status===0){
+  //     message.success('添加用户成功')
+  //     this.getUsers()
+  //   }else{
+  //     message.error('添加用户失败')
+  //   }
+  // }
+  if(this.user){
+    user._id = this.user._id
+  }
+  const result = await reqAddOrUpdateUser(user)
+     if(result.status===0){
+       message.success(`${user._id?'更新':'添加'}用户成功`)
+       this.getUsers()
+     }else{
+      message.error(`${user._id?'更新':'添加'}用户失败`)
+     }
   };
+  showUpdate = (user) =>{
+    this.user=user
+    this.setState({isShow:true})
+    
+  }
+  //显示添加界面
+  showAdd = () =>{
+    this.user = null
+    this.setState({isShow:true})
+  }
   componentWillMount() {
     this.initColumns();
   }
@@ -100,8 +130,9 @@ export default class User extends PureComponent {
       this.getUsers()
   }
   render() {
+    const user = this.user || {}
     const { users, isShow, roles } = this.state;
-    const title = <Button type="primary" onClick={()=> this.setState({isShow:true})}>创建用户</Button>;
+    const title = <Button type="primary" onClick={this.showAdd}>创建用户</Button>;
     return (
       <Card title={title}>
         <Table
@@ -112,14 +143,18 @@ export default class User extends PureComponent {
           pagination={{ defaultPageSize: PAGE_SIZE }}
         />
         <Modal
-          title="添加分类"
+          title={user._id ? '修改用户':'添加用户'}
           visible={isShow}
           onOk={this.addOrUpdateUser}
-          onCancel={() => this.setState({ isShow: false })}
+          onCancel={() =>{
+            this.form.resetFields() 
+            this.setState({ isShow: false }) 
+          }}
         >
           <UserForm 
             setForm={(form) => (this.form = form)}
             roles={roles}
+            user={user}
             />
         </Modal>
       </Card>

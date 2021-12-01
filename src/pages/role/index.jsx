@@ -138,7 +138,7 @@ export default class Role extends Component {
         memoryUtils.user = {};
         storageUtils.removeUser();
         this.props.history.replace("/login");
-        message.success("当前用户角色权限成功");
+        message.success("当前用户角色权限成功,请重新登录");
       } else {
         message.success("设置角色权限成功");
         this.setState({

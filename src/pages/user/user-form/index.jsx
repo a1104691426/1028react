@@ -11,6 +11,7 @@ class UserForm extends Component {
   static propTypes = {
     setForm: PropTypes.func.isRequired, // 用来传递form对象的函数
     roles: PropTypes.array.isRequired,
+    user:PropTypes.object
   };
 
   componentWillMount() {
@@ -18,7 +19,8 @@ class UserForm extends Component {
   }
 
   render() {
-    const { roles } = this.props;
+    const { roles} = this.props;
+    const user = this.props.user
     const { getFieldDecorator } = this.props.form;
     // 指定Item布局的配置对象
     const formItemLayout = {
@@ -30,12 +32,14 @@ class UserForm extends Component {
       <Form {...formItemLayout}>
         <Item label="用户名">
           {getFieldDecorator("username", {
-            initialValue: "",
+            initialValue: user.username,
             rules: [{ required: true, message: "用户名必须输入" },
-            { min: 4,message: "用户名最少4位"},],
+            { min: 3,message: "用户名最少4位"},],
           })(<Input placeholder="请输入用户名" />)}
         </Item>
-        <Item label="密码">
+        {
+          user._id ? null : (
+            <Item label="密码">
           {getFieldDecorator("password", {
             initialValue: "",
             rules: [
@@ -44,19 +48,21 @@ class UserForm extends Component {
             ],
           })(<Input type="password" placeholder="请输入密码" />)}
         </Item>
+          )
+        }
         <Item label="手机号">
           {getFieldDecorator("phone", {
-            initialValue: "",
+            initialValue: user.phone,
           })(<Input placeholder="请输入手机号" />)}
         </Item>
         <Item label="邮箱">
           {getFieldDecorator("email", {
-            initialValue: "",
+            initialValue: user.email,
           })(<Input placeholder="请输入邮箱" />)}
         </Item>
         <Item label="角色">
           {getFieldDecorator("role_id", {
-            initialValue: "",
+            initialValue: user.role_id,
           })(
             <Select placeholder="Select a person">
               {roles.map((role) => (

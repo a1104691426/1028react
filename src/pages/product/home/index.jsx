@@ -162,6 +162,7 @@ export default class ProductHome extends Component {
           dataSource={products}
           columns={this.columns}
           pagination={{
+            current:this.pageNum,
             onChange: this.getProducts,
             total,
             defaultPageSize: PAGE_SIZE,
