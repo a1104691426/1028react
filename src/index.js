@@ -1,18 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import store from './redux/store'
+import App from "./App";
 
-import App from './App'
-import storageUtils from './utils/storageUtils'
-import memoryUtils from './utils/memoryUtils'
+ReactDOM.render(<App store={store}/>, document.getElementById("root"));
 
-// 读取local中保存user, 保存到内存中
-const user = storageUtils.getUser()
-memoryUtils.user = user
-ReactDOM.render(
-    <BrowserRouter>
-        <App/>
-    </BrowserRouter>,
-document.getElementById('root'))
-
-
+store.subscribe(()=>{
+    ReactDOM.render(<App store={store}/>, document.getElementById("root"));
+})
