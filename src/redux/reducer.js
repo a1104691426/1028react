@@ -1,21 +1,25 @@
-//reducer函数模块：根据当前的state和指定的action返回一个新的state
 
-//管理count状态数据的reducer
+import { combineReducers } from "redux";
+import storageUtils from '../utils/storageUtils'
+import {SET_HEAD_TITLE} from './action_types'
+//管理头部标题的reducer函数
 
-import {combineReducers} from 'redux'
-import { INCREMENT , DECREMENT } from "./action_types"
+const initHeadTitle = '首页'
+function headTitle(state=initHeadTitle,action) {
+    switch (action.type) {
+        case SET_HEAD_TITLE :
+            return action.data
+        default: 
+            return state
+    }
+}
+//管理当前登录用户的reducer函数
+const initUser = storageUtils.getUser()
+function user(state={initUser},action) {
+    switch (action.type) {
 
-
-function count(state=0,action){
-    switch(action.type){
-        case INCREMENT:
-            return state + action.number
-        case DECREMENT:
-            return state -action.number
         default:
             return state
+    }
 }
-}
-export default combineReducers({
-    count
-})
+export default combineReducers({headTitle})

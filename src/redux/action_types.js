@@ -1,4 +1,3 @@
-//字符串常量
+//包含n个action的type常量标识名称的模块
 
-export const INCREMENT = 'increment'
-export const DECREMENT = 'decrement'
+export const SET_HEAD_TITLE = 'set_head_title' //标识设置头部标题

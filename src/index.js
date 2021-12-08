@@ -1,12 +1,21 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {Provider} from 'react-redux'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import store from './redux/store'
-import App from "./containers/App";
+import App from './App'
+import store from './redux/store';
+import storageUtils from './utils/storageUtils'
+import memoryUtils from './utils/memoryUtils'
 
-ReactDOM.render(<Provider store={store}>
-    <App />
-</Provider> ,document.getElementById("root"));
+// 读取local中保存user, 保存到内存中
+const user = storageUtils.getUser()
+memoryUtils.user = user
+
+ReactDOM.render((<Provider store={store}>
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter></Provider>),
+document.getElementById('root'))
 
 
