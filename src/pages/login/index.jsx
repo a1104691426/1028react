@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button, message } from "antd";
+import {Redirect} from 'react-router-dom'
+import { Form, Icon, Input, Button } from "antd";
+import {connect} from 'react-redux'
 
 import "./login.less";
+import { login } from "../../redux/actions";
 import logo from "../../assets/images/logo192.png";
-import { reqLogin } from "../../api";
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
 
 const Item = Form.Item; // 不能写在import之前
 
@@ -15,22 +15,20 @@ class Login extends Component {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         const { username, password } = values;
-        const result = await reqLogin(username, password);
-        if (result.status === 0) {
-          // 登陆成功
-          message.success("登陆成功");
-          const user = result.data;
-          memoryUtils.user = user; // 保存在内存中
-          storageUtils.saveUser(user); // 保存到local中
-          this.props.history.replace("/home");
-        }
-      } else {
-        console.log("检验失败");
+        //调用分发异步action的函数 => 发登录异步请求，有了结果后更新状态
+        this.props.login(username,password)
+      }else {
+        console.log('校验失败');
       }
     });
   };
 
   render() {
+    //如果用户已经登录
+    const user = this.props.user
+    if(user&&user._id){
+      return <Redirect to='/home'/>
+    }
     const { getFieldDecorator } = this.props.form;
     return (
       <div className="login">
@@ -39,6 +37,7 @@ class Login extends Component {
           <h1>React项目: 后台管理系统</h1>
         </div>
         <section className="login-content">
+        <div className={user.errorMsg ? 'error-msg show' : 'error-msg'}>{user.errorMsg}</div>
           <h2>用户登录</h2>
           <div>
             <Form onSubmit={this.handleSubmit} className="login-form">
@@ -117,5 +116,8 @@ class Login extends Component {
     );
   }
 }
-const WrapLogin = Form.create()(Login);
-export default WrapLogin;
+const WrapLogin =Form.create()(Login)
+export default connect(
+  state => ({user:state.user}),
+  {login}
+)(WrapLogin);
