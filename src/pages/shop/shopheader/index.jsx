@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import { withRouter,Link } from "react-router-dom";
 
-import LinkButtom from "../link-buttom";
-import { Modal, Icon } from "antd";
-import menuList from "../../config/menuConfig";
-import { reqWeather } from "../../api";
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
-import { formateDate } from "../../utils/dateUtils";
+import LinkButtom from "../../../components/link-buttom";
+import { Modal, Icon  } from "antd";
+import menuList from "../../../config/menuConfig";
+import { reqWeather } from "../../../api";
+import memoryUtils from "../../../utils/memoryUtils";
+import storageUtils from "../../../utils/storageUtils";
+import { formateDate } from "../../../utils/dateUtils";
 import "./index.less";
-class Header extends Component {
+class ShopHeader extends Component {
   state = {
     currentTime: formateDate(Date.now()),
     weather: "",
   };
-  getTitle = () => {
+  gitTitle = () => {
     const path = this.props.location.pathname;
     let title;
     menuList.forEach((item) => {
@@ -69,14 +69,6 @@ class Header extends Component {
       },
     });
   };
-  shop = () =>{
-    Modal.confirm({
-      content: "确定进入商城吗？",
-      onOk: () => {
-        this.props.history.replace("/shop");
-      },
-    });
-  }
   componentWillUnmount() {
     //清楚定时器
     clearInterval(this.intervalId);
@@ -88,24 +80,26 @@ class Header extends Component {
   render() {
     const { currentTime, weather } = this.state;
     const username = memoryUtils.user.username;
-    const title = this.getTitle();
+    const title = this.gitTitle();
     return (
       <div className="header">
-        <div className="header-top">
-          <Link to='/shop'><Icon type="shopping" />商城</Link>
-          <span>欢迎,{username}</span>
-          <LinkButtom onClick={this.logout}>退出</LinkButtom>
-        </div>
-        <div className="header-bottom">
-          <div className="header-bottom-left">{title}</div>
-          <div className="header-bottom-right">
-            <span>{currentTime}</span>
-            {<img src={this.ptsrc()} alt="weather" />}
-            <span>{weather}</span>
-          </div>
+      <div className="header-top">
+        <span>欢迎,{username}</span>
+        <Link style={{marginRight:'5px'}} ><Icon type="shopping-cart" />购物车</Link>
+        <Link style={{marginRight:'5px'}} ><Icon type="menu" />我的订单</Link>
+        <Link ><Icon type="user" />我的账户</Link>
+        <LinkButtom onClick={this.logout}>退出</LinkButtom>
+      </div>
+      <div className="header-bottom">
+        <div className="header-bottom-left">{title}</div>
+        <div className="header-bottom-right">
+          <span>{currentTime}</span>
+          {<img src={this.ptsrc()} alt="weather" />}
+          <span>{weather}</span>
         </div>
       </div>
+    </div>
     );
   }
 }
-export default withRouter(Header);
+export default withRouter(ShopHeader);
